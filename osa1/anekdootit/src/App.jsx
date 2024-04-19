@@ -1,5 +1,54 @@
 import { useState } from 'react'
 
+const AnecdoteDisplay = ({ anecdotes, points, index }) => (
+  <div>
+    <div>
+      {anecdotes[index]}
+    </div>
+    <div>
+      has {points[index]} votes
+    </div>
+  </div>
+)
+
+const AnecdoteOfTheDay = ({ anecdotes, selected, points, handleVote, handleNext }) => (
+  <div>
+    <h1>Anecdote of the day</h1>
+    <AnecdoteDisplay
+      anecdotes={anecdotes}
+      points={points}
+      index={selected}
+    />
+    <div>
+      <button onClick={handleVote}>
+        vote
+      </button>
+      <button onClick={handleNext}>
+        next anecdote
+      </button>
+    </div>
+  </div>
+)
+
+const TopAnecdote = ({ anecdotes, points }) => {
+  const topIndex = points.reduce((currentMax, nextValue, nextIndex, array) =>
+    nextValue > array[currentMax]
+      ? nextIndex
+      : currentMax,
+    0)
+
+  return (
+    <div>
+      <h1>Anecdote with most votes</h1>
+      <AnecdoteDisplay
+        anecdotes={anecdotes}
+        points={points}
+        index={topIndex}
+      />
+    </div>
+  )
+}
+
 const App = () => {
   const anecdotes = [
     'If it hurts, do it more often.',
@@ -18,26 +67,23 @@ const App = () => {
   const sampleRandomAnecdote = () =>
     setSelected(Math.floor(Math.random() * anecdotes.length))
 
-  const voteAnecdote = () =>
+  const voteSelectedAnecdote = () =>
     setPoints(points.map((point, index) =>
       index === selected ? point + 1 : point))
 
   return (
     <div>
-      <div>
-        {anecdotes[selected]}
-      </div>
-      <div>
-        has {points[selected]} votes
-      </div>
-      <div>
-        <button onClick={sampleRandomAnecdote}>
-          next anecdote
-        </button>
-        <button onClick={voteAnecdote}>
-          vote
-        </button>
-      </div>
+      <AnecdoteOfTheDay
+        anecdotes={anecdotes}
+        selected={selected}
+        points={points}
+        handleVote={voteSelectedAnecdote}
+        handleNext={sampleRandomAnecdote}
+      />
+      <TopAnecdote
+        anecdotes={anecdotes}
+        points={points}
+      />
     </div>
   )
 }
