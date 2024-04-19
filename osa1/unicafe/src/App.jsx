@@ -18,10 +18,7 @@ const Statistics = ({ good, neutral, bad }) => {
   if (all === 0) {
     return (
       <div>
-        <Display text="good" count={good} />
-        <Display text="neutral" count={neutral} />
-        <Display text="bad" count={bad} />
-        <Display text="all" count={0} />
+        No feedback given
       </div>
     )
   }
