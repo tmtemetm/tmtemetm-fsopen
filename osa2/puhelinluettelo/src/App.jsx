@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import Filter from './components/Filter'
+import Notification from './components/Notification'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
 import personService from './services/persons'
@@ -9,6 +10,8 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filterName, setFilterName] = useState('')
+  const [notification, setNotification] = useState(null)
+  const [isError, setError] = useState(false)
 
   useEffect(() => {
     personService
@@ -25,6 +28,12 @@ const App = () => {
   const handleFilterNameChange = (event) =>
     setFilterName(event.target.value)
 
+  const displayNotification = (notification, error) => {
+    setError(error)
+    setNotification(notification)
+    setTimeout(() => setNotification(null), 5000)
+  }
+
   const addName = (event) => {
     event.preventDefault()
 
@@ -39,6 +48,7 @@ const App = () => {
           .then(updatedPerson => {
             setPersons(persons.map(person =>
               person.id === updatedPerson.id ? updatedPerson : person))
+            displayNotification(`Updated ${updatedPerson.name}`, false)
             setNewName('')
             setNewNumber('')
           })
@@ -52,6 +62,7 @@ const App = () => {
       personService.create(newPerson)
         .then(createdPerson => {
           setPersons(persons.concat(createdPerson))
+          displayNotification(`Added ${createdPerson.name}`, false)
           setNewName('')
           setNewNumber('')
         })
@@ -62,15 +73,21 @@ const App = () => {
     if (window.confirm(`Delete ${person.name}?`)) {
       personService
         .deletePerson(person.id)
-        .then(deletedPerson =>
+        .then(deletedPerson => {
           setPersons(persons.filter(person =>
-            person.id !== deletedPerson.id)))
+            person.id !== deletedPerson.id))
+          displayNotification(`Deleted ${deletedPerson.name}`)
+        })
     }
   }
 
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification
+        message={notification}
+        isError={isError}
+      />
       <Filter
         filterName={filterName}
         handleFilterNameChange={handleFilterNameChange}
