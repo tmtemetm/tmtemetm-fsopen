@@ -52,6 +52,12 @@ const App = () => {
             setNewName('')
             setNewNumber('')
           })
+          .catch(() => {
+            displayNotification(
+              `Information of ${existingPerson.name} has already been removed from server`,
+              true)
+            setPersons(persons.filter(person => person.id !== existingPerson.id))
+          })
       }
     } else {
       const newPerson = {
