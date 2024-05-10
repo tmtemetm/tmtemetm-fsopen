@@ -15,6 +15,9 @@ const App = () => {
   const handleFilterTextChange = event =>
     setFilterText(event.target.value)
 
+  const handleShowCountry = country =>
+    setFilterText(country.name.common)
+
   return (
     <div>
       <CountryFilter
@@ -24,6 +27,7 @@ const App = () => {
       <CountryList
         countries={countries}
         filterText={filterText}
+        handleShowCountry={handleShowCountry}
       />
     </div>
   )

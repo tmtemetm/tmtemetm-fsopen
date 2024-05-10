@@ -2,9 +2,10 @@ import CountryDetails from './CountryDetails'
 
 const maxCountries = 10
 
-const Country = ({ country }) => (
+const Country = ({ country, handleShowCountry }) => (
   <div>
-    {country.name.common}
+    {country.name.common}&nbsp;
+    <button onClick={() => handleShowCountry(country)}>Show</button>
   </div>
 )
 
@@ -14,7 +15,8 @@ const includesIgnoreCase = (string, substring) =>
 
 const CountryList = ({
   countries,
-  filterText
+  filterText,
+  handleShowCountry
 }) => {
   if (!filterText) {
     return null
@@ -50,6 +52,7 @@ const CountryList = ({
       <Country
         key={country.name.common}
         country={country}
+        handleShowCountry={handleShowCountry}
       />
     ))
 
