@@ -79,10 +79,10 @@ const App = () => {
     if (window.confirm(`Delete ${person.name}?`)) {
       personService
         .deletePerson(person.id)
-        .then(deletedPerson => {
-          setPersons(persons.filter(person =>
-            person.id !== deletedPerson.id))
-          displayNotification(`Deleted ${deletedPerson.name}`)
+        .then(() => {
+          setPersons(persons.filter(p =>
+            p.id !== person.id))
+          displayNotification(`Deleted ${person.name}`)
         })
     }
   }
